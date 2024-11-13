@@ -1,10 +1,13 @@
-import type {  Viewport } from "next";
+import type {  Metadata, Viewport } from "next";
 import { TailwindIndicator } from "~/components/tailwind-indicator";
 import { ThemeProvider } from "~/components/theme-provider";
 import { ThemeToggle } from "~/components/theme-toggle";
 import "~/styles/globals.css";
 import { Toaster} from "sonner";
 import ClientProvider from "./provider";
+import { constructMetadata } from "~/lib/utils";
+
+export const metadata: Metadata = constructMetadata({})
 
 export const viewport: Viewport = {
   colorScheme: "dark",
@@ -21,11 +24,7 @@ export default function RootLayout({
 }>) {
   return (
     <ClientProvider>
-      <html lang="en" suppressHydrationWarning>
-        <head>
-          <link rel="preconnect" href="https://rsms.me/" />
-          <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
-        </head>
+      <html lang="en">
         <body className="mx-auto min-h-screen w-full scroll-smooth bg-background antialiased">
           <ThemeProvider
             attribute="class"
