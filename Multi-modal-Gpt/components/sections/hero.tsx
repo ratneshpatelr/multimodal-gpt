@@ -99,14 +99,14 @@ function HeroCTA({user}: { user: any }) {
          >
             {user ? (
                     <Link
-               href="/dashboard"
+               href="/playground"
                className={cn(
                   buttonVariants({ variant: 'default' }),
                   'flex w-full gap-2 text-background sm:w-auto',
                )}
             >
                <Icons.logo className="size-6" />
-               Dashboard
+               playground
             </Link>
             ): (
 
