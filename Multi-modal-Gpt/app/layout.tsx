@@ -24,7 +24,7 @@ export default function RootLayout({
 }>) {
   return (
     <ClientProvider>
-      <html lang="en">
+      <html lang="en" suppressHydrationWarning>
         <body className="mx-auto min-h-screen w-full scroll-smooth bg-background antialiased">
           <ThemeProvider
             attribute="class"
