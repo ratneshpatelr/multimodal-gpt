@@ -60,6 +60,10 @@ For frontend and backend both
     bun start
 ```
 
+## TODO
+1. Tests in Cypress, Vitest
+2. Improve prompts
+
 ## Contributing
 
 We welcome contributions! Please follow these steps:

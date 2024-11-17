@@ -4,7 +4,7 @@ dotenv.config();
 
 export const getGroqCompletion = async (
   messages: any[],
-  model = "gemma2-9b-it"
+  model = "gemma2-9b-it" // only for texts generation
 ) => {
   let starttime = Date.now();
   const completion = await groq.chat.completions.create({

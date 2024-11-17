@@ -30,7 +30,7 @@ export const imageClassifyController = async (req: Request, res: Response) => {
 
     const responseContent = await getGroqCompletion(
       messages,
-      "llama-3.2-11b-vision-preview"
+      "llama-3.2-11b-vision-preview" // communicate with images
     );
 
     await addToVectorStore(responseContent, {
