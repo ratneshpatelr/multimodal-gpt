@@ -1,14 +1,11 @@
 "use client";
 
-import React from "react";
-
+import React, { useRef, useState } from "react";
 import { PaperPlaneIcon, StopIcon } from "@radix-ui/react-icons";
-// import { ChatRequestOptions } from "ai";
-// import llama3Tokenizer from "llama3-tokenizer-js";
+import { FaImages } from "react-icons/fa";
 import TextareaAutosize from "react-textarea-autosize";
 
 import { useHasMounted } from "../../lib/mount";
-// import { getTokenLimit } from "@/lib/token-counter";
 import { Button } from "../ui/button";
 
 interface ChatBottombarProps {
@@ -29,6 +26,44 @@ export default function ChatBottombar({
   stop,
 }: ChatBottombarProps) {
   const hasSelectedModel = selectedModel && selectedModel !== "";
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+
+  const handleImageClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      // Validate file type and size
+      const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+      const maxSize = 5 * 1024 * 1024; // 5MB
+
+      if (allowedTypes.includes(file.type) && file.size <= maxSize) {
+        setSelectedImage(file);
+        
+        // Optional: Create a preview of the image
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          // You can store the preview URL if needed
+          // setImagePreview(reader.result as string);
+        };
+        reader.readAsDataURL(file);
+      } else {
+        // Handle invalid file
+        alert('Please select a valid image (JPEG, PNG, GIF, WEBP) under 5MB');
+        e.target.value = ''; // Clear the file input
+      }
+    }
+  };
+
+  const removeSelectedImage = () => {
+    setSelectedImage(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = ''; // Clear the file input
+    }
+  };
 
   return (
     <div>
@@ -38,15 +73,46 @@ export default function ChatBottombar({
             onSubmit={handleSubmit}
             className="w-full items-center flex relative gap-2"
           >
+            <input 
+              type="file"
+              ref={fileInputRef}
+              onChange={handleFileChange}
+              accept="image/jpeg,image/png,image/gif,image/webp"
+              className="hidden"
+            />
+
+            <Button
+              size="icon"
+              variant="ghost"
+              type="button"
+              onClick={handleImageClick}
+              className="absolute bottom-1.5 md:bottom-2 left-2 z-100"
+            >
+              <FaImages className="w-5 h-5" />
+            </Button>
+
+            {selectedImage && (
+              <div className="absolute bottom-1.5 md:bottom-2 left-14 z-100 flex items-center">
+                <span className="text-xs text-gray-500 mr-2">
+                  {selectedImage.name}
+                </span>
+                <button 
+                  type="button" 
+                  onClick={removeSelectedImage}
+                  className="text-red-500 hover:text-red-700"
+                >
+                  ✕
+                </button>
+              </div>
+            )}
+
             <TextareaAutosize
               autoComplete="off"
               value={input}
-              // ref={inputRef}
-              // onKeyDown={handleKeyPress}
               onChange={handleInputChange}
               name="message"
               placeholder="Ask vLLM anything..."
-              className="border-input max-h-48 px-4 py-4 text-base shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 dark:focus-visible:ring-slate-500 disabled:cursor-not-allowed disabled:opacity-50 w-full border rounded-md flex items-center h-14 resize-none overflow-hidden dark:bg-card/35 pr-32"
+              className="border-input max-h-48 px-4 py-4 text-base shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 dark:focus-visible:ring-slate-500 disabled:cursor-not-allowed disabled:opacity-50 w-full border rounded-md flex items-center h-14 resize-none overflow-hidden dark:bg-card/35 pl-12 pr-32"
             />
 
             {!isLoading ? (

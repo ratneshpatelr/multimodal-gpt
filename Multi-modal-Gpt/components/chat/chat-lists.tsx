@@ -41,8 +41,7 @@ export default function ChatList({ messages, isLoading }: ChatListProps) {
 
   if (messages.length === 0) {
     return (
-      <div className="w-full h-full flex justify-center items-center">
-        <div className="flex flex-col gap-4 items-center">
+      <div className="inset-0 flex justify-center items-center flex-col">
           <Image
             src={"/ollama.png"}
             alt="AI"
@@ -53,7 +52,6 @@ export default function ChatList({ messages, isLoading }: ChatListProps) {
           <p className="text-center text-xl text-muted-foreground">
             How can I help you today?
           </p>
-        </div>
       </div>
     );
   }
